@@ -119,6 +119,75 @@
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.39.0</version>
+                <configuration>
+                    <images>
+                        <image>
+                            <alias>postgres-database</alias>
+                            <name>postgres</name>
+                            <build>
+                                <dockerFileDir>${project.basedir}/src/main/docker/db</dockerFileDir>
+                                <imagePullPolicy>IfNotPresent</imagePullPolicy>
+                            </build>
+                            <run>
+                                <imagePullPolicy>IfNotPresent</imagePullPolicy>
+                                <!--                                        <wait>-->
+                                <!--                                            <time>50000</time>-->
+                                <!--                                        </wait>-->
+                                <ports>
+                                    <!--                                            <port>1521:1521</port>-->
+                                    <port>5432:5432</port>
+                                </ports>
+                                <!--                                        <network>PUBLIC-->
+                                <!--                                            <mode>custom</mode>-->
+                                <!--                                            <name>wave-example-network</name>-->
+                                <!--                                        </network>-->
+                            </run>
+                        </image>
+                        <!--                                <image>-->
+                        <!--                                    <alias>wave-sample</alias>-->
+                        <!--                                    <name>jboss/wave</name>-->
+                        <!--                                    <run>-->
+                        <!--                                        <namingStrategy>alias</namingStrategy>-->
+                        <!--                                        <imagePullPolicy>Never</imagePullPolicy>-->
+                        <!--                                        <ports>-->
+                        <!--                                            <port>9990:9990</port>-->
+                        <!--                                            <port>8080:8080</port>-->
+                        <!--                                            <port>8443:8443</port>-->
+                        <!--                                            <port>8787:8787</port>-->
+                        <!--                                        </ports>-->
+                        <!--                                        <network>-->
+                        <!--                                            <mode>custom</mode>-->
+                        <!--                                            <name>wave-example-network</name>-->
+                        <!--                                        </network>-->
+                        <!--                                    </run>-->
+                        <!--                                </image>-->
+
+                    </images>
+                    <!--<dockerHost>unix:///var/run/docker.sock</dockerHost>-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <!--                                     If the container is already started, stop it.-->
+                            <goal>stop</goal>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
